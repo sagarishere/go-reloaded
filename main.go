@@ -6,22 +6,10 @@ import (
 	"strings"
 )
 
-type Settings struct {
-	inputFile  string
-	outputFile string
-}
-
-var settings = Settings{
-	inputFile:  "./sample.txt",
-	outputFile: "./result.txt",
-}
-
 func main() {
-	os.Create(settings.outputFile)
-	oriContent := readFullFile(settings.inputFile)
-	processedContent := processText(oriContent)
+	processedContent := processText(readFullFile("./sample.txt"))
 	println(processedContent)
-	os.WriteFile(settings.outputFile, []byte(processedContent), 0644)
+	os.WriteFile("./result.txt", []byte(processedContent), 0644)
 }
 
 func processText(text string) string {
@@ -113,30 +101,14 @@ func removeCommands(words []string) []string {
 
 // convert binary number to digital
 func Bin2Dec(binary string) int {
-	result := 0
-	for i, char := range binary {
-		if char == '1' {
-			result += 1 << (len(binary) - i - 1)
-		}
-	}
-	return result
+	result, _ := strconv.ParseInt(binary, 2, 64)
+	return int(result)
 }
 
 // convert hex number to digital
 func Hex2Dec(hex string) int {
-	result := 0
-	for _, char := range hex {
-		value := 0
-		if char >= '0' && char <= '9' {
-			value = int(char - '0')
-		} else if char >= 'A' && char <= 'F' {
-			value = int(char - 'A' + 10)
-		} else if char >= 'a' && char <= 'f' {
-			value = int(char - 'a' + 10)
-		}
-		result = result*16 + value
-	}
-	return result
+	result, _ := strconv.ParseInt(hex, 16, 64)
+	return int(result)
 }
 
 func Cap(str *string) {
