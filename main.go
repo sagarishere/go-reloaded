@@ -17,11 +17,11 @@ var settings = Settings{
 }
 
 func main() {
-	createFile(settings.outputFile)
+	os.Create(settings.outputFile)
 	oriContent := readFullFile(settings.inputFile)
 	processedContent := processText(oriContent)
 	println(processedContent)
-	WriteStringToFile(settings.outputFile, processedContent)
+	os.WriteFile(settings.outputFile, []byte(processedContent), 0644)
 }
 
 func processText(text string) string {
@@ -154,24 +154,6 @@ func Upper(str *string) {
 }
 
 func readFullFile(filename string) string {
-	content, err := os.ReadFile(filename)
-	if err != nil {
-		panic(err)
-	}
+	content, _ := os.ReadFile(filename)
 	return string(content)
-}
-
-func WriteStringToFile(filename string, content string) {
-	err := os.WriteFile(filename, []byte(content), 0644)
-	if err != nil {
-		panic(err)
-	}
-}
-
-func createFile(filename string) {
-	file, err := os.Create(filename)
-	if err != nil {
-		panic(err)
-	}
-	defer file.Close()
 }
