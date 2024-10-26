@@ -83,6 +83,10 @@ func removeCommands(words []string) []string {
 		if word == "(cap)" || word == "(low)" || word == "(up)" || word == "(bin)" || word == "(hex)" {
 			continue
 		}
+		if word == "(cap)," || word == "(low)," || word == "(up)," || word == "(bin)," || word == "(hex)," {
+			result[len(result)-1] += ","
+			continue
+		}
 		if word == "(cap," || word == "(low," || word == "(up," {
 			removeNext = true
 			continue

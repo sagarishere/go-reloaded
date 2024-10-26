@@ -1,6 +1,26 @@
 package main
 
-import "testing"
+import (
+	"fmt"
+	"testing"
+)
+
+type colorType struct {
+	red, green, yellow, blue, reset string
+}
+
+var c colorType = colorType{
+	red:    "\033[31m",
+	green:  "\033[32m",
+	yellow: "\033[33m",
+	blue:   "\033[34m",
+	reset:  "\033[0m",
+}
+
+func applyColor(color string, text string) string {
+	fmt.Println(color + text + c.reset)
+	return text
+}
 
 func TestBin2Dec(t *testing.T) {
 	tests := []struct {
@@ -181,12 +201,16 @@ func TestProcessText(t *testing.T) {
 			input:  "harold wilson (cap, 2) : ' I am a optimist ,but a optimist who carries a raincoat . '",
 			expect: "Harold Wilson: 'I am an optimist, but an optimist who carries a raincoat.'",
 		},
+		{
+			input:  "it (cap) was the best of times, it was the worst of times (up) , it was the age of wisdom, it was the age of foolishness (cap, 6) , it was the epoch of belief, it was the epoch of incredulity, it was the season of Light, it was the season of darkness, it was the spring of hope, IT WAS THE (low, 3) winter of despair.",
+			expect: "It was the best of times, it was the worst of TIMES, it was the age of wisdom, It Was The Age Of Foolishness, it was the epoch of belief, it was the epoch of incredulity, it was the season of Light, it was the season of darkness, it was the spring of hope, it was the winter of despair.",
+		},
 	}
 
 	for _, test := range tests {
 		result := processText(test.input)
 		if result != test.expect {
-			t.Errorf("processText(%q) = \n%q;\n want\n %q", test.input, result, test.expect)
+			t.Errorf("processText(%q) = \n%q;\n want\n %q", test.input, applyColor(c.red, result), applyColor(c.green, test.expect))
 		}
 	}
 }
