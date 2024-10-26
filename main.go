@@ -95,12 +95,25 @@ func removeCommands(words []string) []string {
 			removeNext = false
 			continue
 		}
-		if strings.Contains("...,!?:;'", word) { // remove punctuation
+		if len(word) > 1 && OnlyPunctuation(word) {
+			result[len(result)-1] += word
+			continue
+		}
+		if strings.Contains(".,!?:;'", word) { // remove punctuation
 			continue
 		}
 		result = append(result, word)
 	}
 	return result
+}
+
+func OnlyPunctuation(word string) bool {
+	for _, c := range word {
+		if !strings.Contains(".,!?:;'", string(c)) {
+			return false
+		}
+	}
+	return true
 }
 
 // convert binary number to digital
